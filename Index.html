@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise for Harshita! 💖</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Pacifico&family=Poppins:wght@300;400;600&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0c10;
+            color: #66fcf1;
+            font-family: 'Fira Code', monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: background-color 2s ease, color 2s ease;
+        }
+
+        #container {
+            width: 80%;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            animation: fadeIn 1s;
+        }
+
+        .active {
+            display: flex;
+        }
+
+        .terminal-text {
+            text-align: left;
+            width: 100%;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .btn {
+            background-color: #1f2833;
+            color: #66fcf1;
+            border: 2px solid #45a29e;
+            padding: 10px 20px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a29e;
+            color: #0b0c10;
+        }
+
+        /* Celebration Screen Styles */
+        #celebration-screen {
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+        }
+
+        .cute-theme {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: #333 !important;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* Hearts */
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff4d6d;
+            animation: floatUp linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            from { transform: translateY(100vh) scale(0.5); opacity: 0.8; }
+            to { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .quiz-btn {
+            background-color: #1f2833;
+            color: #66fcf1;
+            border: 2px solid #45a29e;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.2s;
+            margin: 10px;
+        }
+        
+        .quiz-btn:hover {
+            background-color: #45a29e;
+            color: #0b0c10;
+        }
+
+        /* Interactive Animation Screen Styles */
+        #interactive-celebration {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #111;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            transition: background-color 2s, color 2s;
+        }
+
+        .lights-on {
+            background-color: #fff3e0 !important;
+            color: #333 !important;
+        }
+
+        .action-bars {
+            position: absolute;
+            bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            z-index: 100;
+            padding: 0 20px;
+        }
+
+        .action-btn {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            display: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .action-btn.visible {
+            display: inline-block;
+        }
+
+        .hidden-el {
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .show-el {
+            opacity: 1;
+        }
+
+        .cake-container {
+            position: relative;
+            margin-top: 40px;
+            z-index: 10;
+        }
+        
+        .candles {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 3rem;
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+
+        .stickers-container {
+            position: absolute;
+            top: 20%;
+            font-size: 6rem;
+            animation: popIn 1s ease-out forwards;
+            z-index: 15;
+        }
+
+        .balloons {
+            position: absolute;
+            bottom: -200px;
+            width: 80px;
+            height: 120px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            animation: floatUp 5s linear infinite;
+        }
+
+        .banner {
+            position: absolute;
+            top: 10%;
+            width: 80%;
+            max-width: 500px;
+            z-index: 10;
+            display: none;
+        }
+        
+        .banner.show-el {
+            display: block;
+            animation: slideDown 2s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-200px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Bulbs Styles */
+        .bulbs-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .bulbs-on {
+            opacity: 1 !important;
+        }
+        .bulb {
+            width: 40px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('template_bday/bulb.png');
+        }
+        .bulb.glow-yellow { background-image: url('template_bday/bulb_yellow.png'); }
+        .bulb.glow-red { background-image: url('template_bday/bulb_red.png'); }
+        .bulb.glow-blue { background-image: url('template_bday/bulb_blue.png'); }
+        .bulb.glow-green { background-image: url('template_bday/bulb_green.png'); }
+        .bulb.glow-pink { background-image: url('template_bday/bulb_pink.png'); }
+        .bulb.glow-orange { background-image: url('template_bday/bulb_orange.png'); }
+
+        .memory-images {
+            position: absolute;
+            top: 15%;
+            width: 100%;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s;
+            z-index: 5;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        .memory-images img {
+            width: 25%;
+            max-width: 180px;
+            aspect-ratio: 9/16;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            border: 4px solid #fff;
+            transform: rotate(-5deg);
+        }
+        .memory-images img:nth-child(even) {
+            transform: rotate(5deg);
+        }
+
+        /* Final Memory Screen Styles */
+        #screen-memory {
+            background-color: #0f0c29;  /* Deep gradient background */
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            width: 100vw;
+            height: 100vh;
+            overflow-y: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        #screen-memory.active {
+            display: flex;
+            animation: fadeIn 2s;
+        }
+
+        /* Massive Special Text Styling */
+        .massive-msg {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: popIn 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .giant-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 5rem;
+            color: #ff4d6d;
+            text-shadow: 3px 3px 10px rgba(255, 77, 109, 0.5);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .programming-fighting {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.8rem;
+            color: #66fcf1;
+            margin-top: 10px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+        }
+
+        @media (max-width: 768px) {
+            .giant-title { font-size: 3.5rem; }
+            .programming-fighting { font-size: 1.2rem; }
+        }
+
+        .memory-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 20px;
+            padding-bottom: 50px;
+        }
+
+        .memory-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .memory-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.4);
+            z-index: 10;
+        }
+
+        /* Enforce Portrait Ratio for everything in the gallery */
+        .memory-item img, .memory-item video {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Lightbox (Click to Enlarge) Styles */
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        #lightbox-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        #lightbox-content img, #lightbox-content video {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.5);
+            object-fit: contain;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.3s;
+            z-index: 10000;
+        }
+
+        .close-btn:hover {
+            color: #ff4d6d;
+        }
+
+        /* Countdown specific styles */
+        #countdown-timer {
+            font-size: 3rem;
+            color: #c678dd;
+            font-weight: bold;
+            margin-top: 10px;
+            text-shadow: 0 0 10px rgba(198, 120, 221, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <!-- Using your local hbd.mp3 file -->
+        <source src="hbd.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="container">
+        <!-- Screen 0: Lock Screen (Before April 8th) -->
+        <div id="screen-early" class="screen">
+            <div class="terminal-text" style="text-align: center;">
+                <h1 style="color: #ff4d6d; font-family: 'Pacifico', cursive; font-size: 4rem; margin-bottom: 0;">Hold your horses! 🐴</h1>
+                <p style="font-size: 1.5rem; color: #abb2bf;">It's not 12:00 AM yet!</p>
+                <p style="font-size: 1.2rem; margin-top: 30px;">The surprise unlocks in:</p>
+                <div id="countdown-timer">--:--:--</div>
+            </div>
+        </div>
+
+        <!-- Screen 1: Boot Sequence -->
+        <div id="screen-1" class="screen">
+            <div class="terminal-text">
+                <p id="line1"></p>
+                <p id="line2" style="display:none;"></p>
+                <p id="line3" style="display:none;"></p>
+            </div>
+            <button id="btn-1" class="btn" style="display:none;" onclick="nextScreen(2)">[ Initialize Connection ]</button>
+        </div>
+
+        <!-- Screen 2: System Scan -->
+        <div id="screen-2" class="screen">
+            <div class="terminal-text">
+                <p>> System scan initiated...</p>
+                <p>> Decrypting friendship core...</p>
+                <p>> ALERT: Massive amounts of cuteness and coding skills detected.</p>
+                <p>> Target identified: <span style="color:#ffb6c1; font-weight:bold;">HARSHITA</span>.</p>
+            </div>
+            <button class="btn" onclick="nextScreen(3)">[ Bypass Firewall & Proceed ]</button>
+        </div>
+
+        <!-- Screen 3: The Setup -->
+        <div id="screen-3" class="screen">
+            <div class="terminal-text">
+                <p>> Compiling special instructions...</p>
+                <p>> Loading assets: Hugs (100%), Cake (Virtual), Love (Overflow Error).</p>
+                <p>> Executing script: <span style="color:#c678dd;">Birthday_Surprise.js</span></p>
+                <p class="cursor">> Ready to execute.</p>
+            </div>
+            <button class="btn" onclick="triggerQuiz()">[ Run Exploit.exe 🎉 ]</button>
+        </div>
+
+        <!-- Screen Quiz 1 -->
+        <div id="screen-quiz1" class="screen">
+            <div class="quiz-container">
+                <h2>Jee Mains Level Question 1:</h2>
+                <p>Who is best?</p>
+                <div id="q1-buttons">
+                    <button class="quiz-btn" id="btn-harshita" onmouseover="swapNames()">Harshita</button>
+                    <button class="quiz-btn" id="btn-ranveer" onclick="nextQuiz()">Ranveer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen Quiz 2 -->
+        <div id="screen-quiz2" class="screen">
+            <div class="quiz-container">
+                <h2>Jee Mains Level Question 2:</h2>
+                <p>Who is the best person you met this year?</p>
+                <div>
+                    <button class="quiz-btn" onclick="goToCelebration()">Ranveer</button>
+                    <button class="quiz-btn" onclick="goToCelebration()">Ranveer</button>
+                    <button class="quiz-btn" onclick="goToCelebration()">Ranveer</button>
+                    <button class="quiz-btn" onclick="wrongAnswer()">No one</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 4: Interactive Celebration -->
+        <div id="screen-celebration" class="screen" style="padding:0; width:100%; max-width:100%;">
+            <div id="interactive-celebration">
+
+                <!-- Lights -->
+                <div id="bulbs-div" class="bulbs-container">
+                    <div class="bulb" id="bulb1"></div>
+                    <div class="bulb" id="bulb2"></div>
+                    <div class="bulb" id="bulb3"></div>
+                    <div class="bulb" id="bulb4"></div>
+                    <div class="bulb" id="bulb5"></div>
+                    <div class="bulb" id="bulb6"></div>
+                </div>
+
+                <img id="decor-banner" class="banner hidden-el" src="template_bday/banner.png" alt="Happy Birthday">
+                
+                <div id="horse-sticker" class="stickers-container hidden-el">🐴💖</div>
+
+                <div id="cake-div" class="cake-container hidden-el">
+                    <div id="candles-div" class="candles">🔥🔥🔥</div>
+                    <img src="template_bday/cake128.png" alt="Cake" style="width: 150px;">
+                </div>
+
+                <!-- Initial Teaser Memories -->
+                <div id="memory-board" class="memory-images">
+                    <img src="memory/WhatsApp Image 2026-04-07 at 10.49.21 PM.jpeg" alt="Memory 1">
+                    <img src="memory/WhatsApp Image 2026-04-07 at 10.49.22 PM.jpeg" alt="Memory 2">
+                    <img src="memory/WhatsApp Image 2026-04-07 at 10.49.23 PM.jpeg" alt="Memory 3">
+                </div>
+
+                <div class="action-bars">
+                    <button id="btn-lights" class="action-btn visible" onclick="turnOnLights()">Turn On Lights</button>
+                    <button id="btn-music" class="action-btn" onclick="playMusic()">Play Music</button>
+                    <button id="btn-decor" class="action-btn" onclick="showDecor()">Let's Decorate</button>
+                    <button id="btn-balloons" class="action-btn" onclick="flyBalloons()">Fly With Balloons</button>
+                    <button id="btn-cake" class="action-btn" onclick="showCake()">Delicious Cake</button>
+                    <button id="btn-candles" class="action-btn" onclick="lightCandles()">Light Candle</button>
+                    <button id="btn-ready" class="action-btn" onclick="showBirthdayGirl()">Ready Birthday Girl</button>
+                    <button id="btn-blow" class="action-btn" onclick="blowCandles()">Blow the Candles & Wooo!</button>
+                    <button id="btn-memories" class="action-btn" onclick="showFinalMemories()">Open The Vault 💖</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Memory Screen -->
+        <div id="screen-memory" class="screen">
+            
+            <div class="massive-msg">
+                <h1 class="giant-title">HAPPY BIRTHDAY HARSHITA! 🎂</h1>
+                <p class="programming-fighting">To my favorite partner in Programming & Fighting! 💻🥊</p>
+            </div>
+            
+            <p style="color: #ccc; font-size: 1.1rem; font-family: 'Poppins', sans-serif;">Click any image or video to make it big! ✨</p>
+            
+            <div class="memory-gallery">
+                <!-- Images -->
+                <div class="memory-item">
+                    <img onclick="openLightbox(this)" src="memory/WhatsApp Image 2026-04-07 at 10.49.21 PM.jpeg" alt="Memory">
+                </div>
+                <div class="memory-item">
+                    <img onclick="openLightbox(this)" src="memory/WhatsApp Image 2026-04-07 at 10.49.22 PM.jpeg" alt="Memory">
+                </div>
+                <div class="memory-item">
+                    <img onclick="openLightbox(this)" src="memory/WhatsApp Image 2026-04-07 at 10.49.23 PM.jpeg" alt="Memory">
+                </div>
+                <div class="memory-item">
+                    <img onclick="openLightbox(this)" src="memory/WhatsApp Image 2026-04-07 at 10.49.33 PM.jpeg" alt="Memory">
+                </div>
+
+                <!-- Videos with autoplay, loop, muted, and portrait ratio -->
+                <div class="memory-item">
+                    <video autoplay loop muted playsinline onclick="openLightbox(this)" src="memory/WhatsApp Video 2026-04-07 at 10.49.21 PM.mp4"></video>
+                </div>
+                <div class="memory-item">
+                    <video autoplay loop muted playsinline onclick="openLightbox(this)" src="memory/WhatsApp Video 2026-04-07 at 10.49.26 PM.mp4"></video>
+                </div>
+                <div class="memory-item">
+                    <video autoplay loop muted playsinline onclick="openLightbox(this)" src="memory/WhatsApp Video 2026-04-07 at 10.49.32 PM.mp4"></video>
+                </div>
+                <div class="memory-item">
+                    <video autoplay loop muted playsinline onclick="openLightbox(this)" src="memory/WhatsApp Video 2026-04-07 at 10.49.34 PM.mp4"></video>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Lightbox Element (Hidden by default) -->
+    <div id="lightbox" onclick="closeLightbox(event)">
+        <span class="close-btn" onclick="closeLightbox(event)">&times;</span>
+        <div id="lightbox-content"></div>
+    </div>
+
+    <script>
+        // Typing Effect Logic
+        const text1 = "> root@server:~$ ./initialize_surprise.sh";
+        const text2 = "> Booting up secure channel...";
+        const text3 = "> Establishing connection to user terminal... Success.";
+
+        // Security Lock & Date Configuration
+        // This targets April 8, 2026 at 00:00:00 (Midnight)
+        const targetDate = new Date("2026-04-08T00:00:00").getTime();
+        let isBootStarted = false;
+
+        window.onload = () => {
+            checkLock();
+        };
+
+        function checkLock() {
+            const now = new Date().getTime();
+            
+            if (now < targetDate) {
+                // It is before 12 AM April 8th
+                document.getElementById('screen-early').classList.add('active');
+                
+                // Calculate time left
+                const distance = targetDate - now;
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                // Formatting values to always show two digits (e.g., 09:05:01)
+                const h = hours < 10 ? "0" + hours : hours;
+                const m = minutes < 10 ? "0" + minutes : minutes;
+                const s = seconds < 10 ? "0" + seconds : seconds;
+                
+                document.getElementById("countdown-timer").innerHTML = `${h}:${m}:${s}`;
+                
+                // Recheck every second
+                setTimeout(checkLock, 1000);
+            } else {
+                // Time has passed! Unlock the surprise!
+                document.getElementById('screen-early').classList.remove('active');
+                document.getElementById('screen-1').classList.add('active');
+                
+                if (!isBootStarted) {
+                    isBootStarted = true;
+                    startBootSequence();
+                }
+            }
+        }
+
+        function typeWriter(elementId, text, speed, callback) {
+            let el = document.getElementById(elementId);
+            el.style.display = "block";
+            el.innerHTML += '<span class="cursor"></span>';
+            let index = 0;
+            
+            function type() {
+                if (index < text.length) {
+                    el.innerHTML = el.innerHTML.replace('<span class="cursor"></span>', text.charAt(index) + '<span class="cursor"></span>');
+                    index++;
+                    setTimeout(type, speed);
+                } else {
+                    el.innerHTML = el.innerHTML.replace('<span class="cursor"></span>', '');
+                    if (callback) callback();
+                }
+            }
+            type();
+        }
+
+        function startBootSequence() {
+            typeWriter("line1", text1, 50, () => {
+                setTimeout(() => {
+                    typeWriter("line2", text2, 30, () => {
+                        setTimeout(() => {
+                            typeWriter("line3", text3, 30, () => {
+                                document.getElementById('btn-1').style.display = 'inline-block';
+                            });
+                        }, 500);
+                    });
+                }, 800);
+            });
+        }
+
+        function nextScreen(num) {
+            // Hide all
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Show new
+            let targetScreen = document.getElementById('screen-' + num);
+            if(targetScreen) targetScreen.classList.add('active');
+            
+            // Play a click beep if Web Audio API is supported
+            playClickSound();
+        }
+
+        function triggerQuiz() {
+            document.getElementById('screen-3').classList.remove('active');
+            document.getElementById('screen-quiz1').classList.add('active');
+        }
+
+        function swapNames() {
+            let hBtn = document.getElementById('btn-harshita');
+            let rBtn = document.getElementById('btn-ranveer');
+            
+            // Swap text to always force Ranveer as the best
+            hBtn.innerText = "Ranveer";
+            rBtn.innerText = "Harshita";
+            
+            // Redirect onclick for the swapped button
+            hBtn.onclick = function() { nextQuiz(); };
+            rBtn.onclick = function() { alert("Haha nice try!"); swapNames(); };
+        }
+
+        function nextQuiz() {
+            alert("Correct Answer! Ranveer is indeed the best.");
+            document.getElementById('screen-quiz1').classList.remove('active');
+            document.getElementById('screen-quiz2').classList.add('active');
+        }
+
+        function wrongAnswer() {
+            alert("Wrong Answer! Try again.");
+            // Shake effect could be added here
+        }
+
+        function goToCelebration() {
+            alert("Correct! Setting up your surprise workspace...");
+            document.getElementById('screen-quiz2').classList.remove('active');
+            document.getElementById('screen-celebration').classList.add('active');
+        }
+
+        // --- Interactive Celebration Functions ---
+        function turnOnLights() {
+            document.getElementById('interactive-celebration').classList.add('lights-on');
+            document.getElementById('btn-lights').classList.remove('visible');
+            document.getElementById('btn-music').classList.add('visible');
+
+            // Turn on bulbs
+            document.getElementById('bulbs-div').classList.add('bulbs-on');
+            document.getElementById('bulb1').classList.add('glow-yellow');
+            document.getElementById('bulb2').classList.add('glow-red');
+            document.getElementById('bulb3').classList.add('glow-blue');
+            document.getElementById('bulb4').classList.add('glow-green');
+            document.getElementById('bulb5').classList.add('glow-pink');
+            document.getElementById('bulb6').classList.add('glow-orange');
+        }
+
+        function playMusic() {
+            const audio = document.getElementById('bg-music');
+            audio.volume = 0.5;
+            audio.play().catch(e => console.log(e));
+            document.getElementById('btn-music').classList.remove('visible');
+            document.getElementById('btn-decor').classList.add('visible');
+        }
+
+        function showDecor() {
+            document.getElementById('decor-banner').classList.add('show-el');
+            document.getElementById('btn-decor').classList.remove('visible');
+            document.getElementById('btn-balloons').classList.add('visible');
+            createConfetti();
+        }
+
+        function flyBalloons() {
+            // Spawn image balloons correctly fetching from template_bday folder
+            const balloonImages = ['b1.png', 'b2.png', 'b3.png', 'b4.png', 'b5.png', 'b6.png', 'b7.png'];
+            for (let i = 0; i < 25; i++) {
+                let balloon = document.createElement('div');
+                balloon.classList.add('balloons');
+                let img = balloonImages[Math.floor(Math.random() * balloonImages.length)];
+                balloon.style.backgroundImage = `url('template_bday/${img}')`;
+                balloon.style.left = Math.random() * 90 + 'vw';
+                balloon.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                balloon.style.animationDelay = (Math.random() * 2) + 's';
+                document.getElementById('interactive-celebration').appendChild(balloon);
+            }
+            document.getElementById('btn-balloons').classList.remove('visible');
+            document.getElementById('btn-cake').classList.add('visible');
+        }
+
+        function showCake() {
+            document.getElementById('cake-div').classList.add('show-el');
+            document.getElementById('btn-cake').classList.remove('visible');
+            document.getElementById('btn-candles').classList.add('visible');
+        }
+
+        function lightCandles() {
+            document.getElementById('candles-div').style.opacity = '1';
+            document.getElementById('btn-candles').classList.remove('visible');
+            document.getElementById('btn-ready').classList.add('visible');
+        }
+
+        function showBirthdayGirl() {
+            document.getElementById('horse-sticker').classList.add('show-el');
+            document.getElementById('btn-ready').classList.remove('visible');
+            document.getElementById('btn-blow').classList.add('visible');
+        }
+
+        function blowCandles() {
+            document.getElementById('candles-div').innerText = '💨💨💨';
+            setTimeout(() => {
+                document.getElementById('candles-div').style.opacity = '0';
+            }, 1000);
+            
+            document.getElementById('btn-blow').classList.remove('visible');
+            createHearts();
+            
+            // Final message pop and memory photos
+            setTimeout(() => {
+                document.getElementById('cake-div').classList.remove('show-el');  
+                document.getElementById('cake-div').style.display = 'none';       
+                document.getElementById('horse-sticker').classList.remove('show-el');                                                                                               
+                document.getElementById('horse-sticker').style.display = 'none';  
+
+                document.getElementById('memory-board').style.opacity = '1';      
+                document.getElementById('btn-memories').classList.add('visible');
+
+                alert("WOOOO! HAPPY BIRTHDAY HARSHITA! 🐴💖🎉 Let's open the vault!");                                                                         
+            }, 1500);
+        }
+
+        function showFinalMemories() {
+            // Hide everything and show the memory vault
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-memory').classList.add('active');
+            createConfetti();
+        }
+
+        // --- Lightbox Functions ---
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const contentBox = document.getElementById('lightbox-content');
+            
+            // Clear previous content
+            contentBox.innerHTML = '';
+            
+            if (element.tagName === 'IMG') {
+                const img = document.createElement('img');
+                img.src = element.src;
+                contentBox.appendChild(img);
+            } else if (element.tagName === 'VIDEO') {
+                const vid = document.createElement('video');
+                vid.src = element.src;
+                vid.autoplay = true;
+                vid.controls = true;
+                vid.loop = true;
+                contentBox.appendChild(vid);
+            }
+            
+            lightbox.style.display = 'flex';
+        }
+
+        function closeLightbox(event) {
+            // Only close if clicking the background or the 'X' button
+            if (event.target.id === 'lightbox' || event.target.classList.contains('close-btn')) {
+                document.getElementById('lightbox').style.display = 'none';
+                document.getElementById('lightbox-content').innerHTML = ''; // This stops the video
+            }
+        }
+
+        function playClickSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); 
+                oscillator.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } catch (e) { console.log("AudioContext not supported"); }
+        }
+
+        // Confetti Engine
+        function createConfetti() {
+            const colors = ['#ff4d6d', '#ffb6c1', '#fecfef', '#a2d2ff', '#ffc6ff'];
+            for (let i = 0; i < 100; i++) {
+                let conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                conf.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(conf);
+            }
+        }
+
+        // Floating Hearts Engine
+        function createHearts() {
+            setInterval(() => {
+                let heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                heart.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+                document.body.appendChild(heart);
+                
+                // Cleanup
+                setTimeout(() => {
+                    heart.remove();
+                }, 7000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
